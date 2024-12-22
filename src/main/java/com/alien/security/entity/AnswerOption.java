@@ -1,27 +1,25 @@
 package com.alien.security.entity;
-
 import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "student")
+@Table(name = "answeroption")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Student {
+@Data
+public class AnswerOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String lastName;
-    private String middleName;
-    private String dateBirt;
+
+    private String answerText;
+    private String isCorrect;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_group_id", nullable = false)
+    @JoinColumn(name = "question_id", nullable = false)
     @JsonBackReference
-    private Group group;
-
+    private Question question;
 }

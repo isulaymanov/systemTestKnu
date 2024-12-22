@@ -4,15 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Data;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class SimpleEducationLevelDTO {
+public class TestingGroupDTO {
     private Long id;
-    private String name;
-    private String faculty;
+    private GroupDTO group;
+    private TestingDTO testing;
 }

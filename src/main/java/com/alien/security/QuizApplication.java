@@ -15,13 +15,11 @@ public class QuizApplication {
 		SpringApplication.run(QuizApplication.class, args);
 	}
 
-   @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
-     return builder.getAuthenticationManager();
-    }
-    
-    @Bean 
-	   public PasswordEncoder passwordEncoder() { 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {return builder.getAuthenticationManager();}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
 	       return new BCryptPasswordEncoder(); 
 	   } 
 }

@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface FacultyRepository extends JpaRepository<Faculty, Long> {
-    List<Faculty> findByUser(UserModel user);
-    Optional<Faculty> findByIdAndUser(Long id, UserModel user);
-
+public interface TestingRepository extends JpaRepository<Testing, Long>{
+    List<Testing> findByUser(UserModel user);
+    Optional<Testing> findByIdAndUser(Long id, UserModel user);
 }

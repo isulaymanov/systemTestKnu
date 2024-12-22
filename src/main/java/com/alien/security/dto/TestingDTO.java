@@ -4,19 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Data;
 
+import java.time.LocalDate;
+import java.util.List;
 
-@Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DisciplineDTO {
+public class TestingDTO {
     private Long id;
     private String name;
-    private String code;
     private String description;
-    private DepartmentDTO department;
-    private DirectionDTO direction;
+    private Integer passDate;
+    private Integer limitDate;
 }

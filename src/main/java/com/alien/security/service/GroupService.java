@@ -1,85 +1,51 @@
 package com.alien.security.service;
-import com.alien.security.repo.FacultyRepository;
-import com.alien.security.repo.GroupRepository;
+
 import jakarta.persistence.EntityNotFoundException;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.alien.security.entity.*;
 import java.util.List;
-import java.util.stream.Collectors;
-import com.alien.security.dto.DirectionDTO;
-import com.alien.security.dto.FacultyDTO;
-import com.alien.security.dto.SimpleEducationLevelDTO;
-import java.util.stream.Collectors;
-import com.alien.security.entity.*;
-import com.alien.security.dto.*;
+import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.alien.security.entity.UserModel;
+import com.alien.security.entity.Group;
+import com.alien.security.repo.GroupRepository;
 
 @Service
 public class GroupService {
 
-    private final GroupRepository groupRepository;
-    private final FacultyRepository facultyRepository;
-
     @Autowired
-    public GroupService (GroupRepository groupRepository, FacultyRepository facultyRepository) {
-        this.groupRepository = groupRepository;
-        this.facultyRepository = facultyRepository;
-    }
+    private GroupRepository groupRepository;
 
-    public Group createGroup(Group group) {
+    public Group createGroup(Group group, UserModel user){
+        group.setUser(user);
         return groupRepository.save(group);
     }
 
-    public List<GroupDTO> getAllGroups() {
-        return groupRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public List<Group> getGroupByUser(UserModel user) {
+        return groupRepository.findByUser(user);
     }
 
-    private GroupDTO convertToDTO(Group group) {
-        Faculty faculty = group.getFaculty();
+    @Transactional
+    public Group updateGroup(Long id, Group updateGroup, UserModel user) {
+        Optional<Group> existingGroupOptional = groupRepository.findByIdAndUser(id, user);
 
-        FacultyDTO facultyDTO = new FacultyDTO(
-                faculty.getId(),
-                faculty.getName(),
-                faculty.getCode(),
-                faculty.getDescription(),
-                faculty.getFoundationDate(),
-                faculty.getContactInfo(),
-                faculty.getEducationLevels().stream()
-                        .map(level -> new SimpleEducationLevelDTO(level.getId(), level.getName(), faculty.getName()))
-                        .collect(Collectors.toList())
-        );
+        if (existingGroupOptional.isPresent()){
+            Group existingGroup = existingGroupOptional.get();
 
-        return new GroupDTO(
-                group.getId(),
-                group.getName(),
-                group.getCode(),
-                group.getYearBeginStudy(),
-                facultyDTO
-        );
-    }
-
-    public Group updateGroup(Long id, Group updateGroup){
-        Group existingGroup = groupRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Group not found"));
-        existingGroup.setName(updateGroup.getName());
-        existingGroup.setFaculty(updateGroup.getFaculty());
-        return groupRepository.save(existingGroup);
-    }
-
-    public void deleteGroup(Long id){
-        if(groupRepository.existsById(id)){
-            groupRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException("Group not found with id " + id);
+            if (updateGroup.getName() != null && !updateGroup.getName().equals(existingGroup.getName())){
+                existingGroup.setName(updateGroup.getName());
+            }
+            return groupRepository.save(existingGroup);
         }
 
+        throw new EntityNotFoundException("Group with id " + id + "not found");
     }
 
-    public class ResourceNotFoundException extends RuntimeException {
-        public ResourceNotFoundException(String message) {
-            super(message);
-        }
+    public void deleteGroup(Long id, UserModel user){
+        Group group = groupRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new EntityNotFoundException("Group mot found"));
+        groupRepository.delete(group);
     }
 }

@@ -1,15 +1,14 @@
 package com.alien.security.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupDTO {
+public class QuestionDTO {
     private Long id;
-    private String name;
+    private String questionText;
+    private TestingDTO testing;
 }

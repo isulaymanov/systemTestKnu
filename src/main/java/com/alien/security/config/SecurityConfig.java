@@ -66,11 +66,7 @@ public class SecurityConfig {
 	        		"/api/user",
 	        		"/api/createuser",
 	        		"/api/adduser",
-				    "/api/faculty/**",
-					"/api/education-levels/**",
-					"/api/direction/**",
-					"/api/department/**",
-	        		"/api/refreshToken","/assignment/**","/question/**","/quiz/**").permitAll()
+	        		"/api/refreshToken","/testing/**").permitAll()
 	        .requestMatchers("/api/**").authenticated()
             .anyRequest().authenticated()
             )

@@ -1,54 +1,58 @@
 package com.alien.security.controller;
-import com.alien.security.service.DirectionService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import com.alien.security.entity.*;
-import java.util.List;
 import org.springframework.http.HttpStatus;
-import com.alien.security.service.*;
-import com.alien.security.dto.*;
+import org.springframework.http.ResponseEntity;
+import java.util.List;
+
+import com.alien.security.entity.UserModel;
+import com.alien.security.entity.Group;
+import com.alien.security.service.GroupService;
 
 @RestController
 @RequestMapping("/api/group")
 public class GroupController {
 
-    private final GroupService groupService;
-
     @Autowired
-    public GroupController (GroupService groupService) {
-        this.groupService = groupService;
+    private GroupService groupService;
+
+    @PostMapping("/create")
+    public Group createGroup(@RequestBody Group group, @AuthenticationPrincipal UserModel user){
+        return groupService.createGroup(group,user);
     }
 
-    @PostMapping
-    public ResponseEntity<Group> createGroup(@RequestBody Group group) {
-        return ResponseEntity.ok(groupService.createGroup(group));
-
-    }
-
-
-    @GetMapping("/allGroups")
-    public ResponseEntity<List<GroupDTO>> getAllGroups() {
-        System.out.println("getAllGroups() called");
-        List<GroupDTO> res = groupService.getAllGroups();
-        if (res.isEmpty()) {
-            System.out.println("No groups found.");
+    @GetMapping("/all")
+    public ResponseEntity<List<Group>> getGroup(@AuthenticationPrincipal UserModel currentUser){
+        List<Group> groups = groupService.getGroupByUser(currentUser);
+        if (groups.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        System.out.println("Groups found: " + res.size());
-        return ResponseEntity.status(HttpStatus.OK).body(res);
+
+        return ResponseEntity.status(HttpStatus.OK).body(groups);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Group> updateGroup(@PathVariable Long id, @RequestBody Group updateGroup) {
-        Group group = groupService.updateGroup(id, updateGroup);
-        return ResponseEntity.ok(group);
+    @PatchMapping("/edit/{id}")
+    public ResponseEntity<String> updateGroup(
+            @PathVariable("id") Long id,
+            @RequestBody Group updateGroup,
+            @AuthenticationPrincipal UserModel user){
+        try {
+            Group updated = groupService.updateGroup(id, updateGroup, user);
+            if (updated != null){
+                return ResponseEntity.status(HttpStatus.CREATED).body("Group Updated Successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Group not found or not allowed to update");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGroup(@PathVariable Long id) {
-        groupService.deleteGroup(id);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/delete/{id}")
+    public void deleteGroup(@PathVariable Long id, @AuthenticationPrincipal UserModel user) {
+        groupService.deleteGroup(id, user);
     }
-
 }
