@@ -21,20 +21,12 @@ public class TestingGroupController {
         this.testingGroupService = testingGroupService;
     }
 
-//    @PostMapping
-//    public ResponseEntity<TestingGroup> createTestinGroup(@RequestBody TestingGroup testingGroup){
-//        return ResponseEntity.ok(testingGroupService.createTestingGroup(testingGroup));
-//    }
     @PostMapping
     public ResponseEntity<TestingGroup> createTestingGroup(@RequestBody TestingGroup testingGroup) {
         TestingGroup createdTestingGroup = testingGroupService.createTestingGroup(testingGroup);
         return new ResponseEntity<>(createdTestingGroup, HttpStatus.CREATED);
     }
 
-//    @GetMapping("/testinggroup/{groupId}")
-//    public List<TestingGroup> getTestingGroupByGroup(@PathVariable Long groupId){
-//        return testingGroupService.getTestingGroup(groupId);
-//    }
     @GetMapping("/group/{groupId}")
     public List<TestingGroupDTO> getAllTestingGroupsByGroupId(@PathVariable Long groupId) {
         return testingGroupService.getAllTestingGroupsByGroupId(groupId);

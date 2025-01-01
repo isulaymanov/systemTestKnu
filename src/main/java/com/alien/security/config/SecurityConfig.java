@@ -66,7 +66,14 @@ public class SecurityConfig {
 	        		"/api/user",
 	        		"/api/createuser",
 	        		"/api/adduser",
-	        		"/api/refreshToken","/testing/**").permitAll()
+	        		"/api/refreshToken",
+					"/testing/**",
+					"/api/testing-group/group/*",  // Новый общедоступный маршрут
+					"/api/testing-group/testing-group/all",
+					"/api/answer-option/question/*",
+					"/api/question/testing/*",
+					"/api/attempt-student"
+					).permitAll()
 	        .requestMatchers("/api/**").authenticated()
             .anyRequest().authenticated()
             )
@@ -101,7 +108,6 @@ public class SecurityConfig {
 		   provider.setPasswordEncoder(passwordEncoder);
 		   return provider;
 	   }
-//Добавил 11.11.2024 last chang в моем коде время 21:35 если какиета api отваляться то тут надо удалить
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
@@ -114,6 +120,5 @@ public class SecurityConfig {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
-	//-----------------------------------------------------------------------------------
 	  
 }

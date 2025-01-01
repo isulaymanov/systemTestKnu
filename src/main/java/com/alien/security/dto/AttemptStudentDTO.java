@@ -12,7 +12,8 @@ public class AttemptStudentDTO {
     private String name;
     private String surname;
     private String dateCompletion;
-    private int result;
+    private String result;
+    //private int result;
     private String startTime;
     private String endTime;
     private TestingGroupDTO testingGroup;

@@ -19,7 +19,8 @@ public class AttemptStudent {
     private String name;
     private String surname;
     private String dateCompletion;
-    private Integer result;
+    private String result;
+    //private Integer result;
     private String startTime;
     private String endTime;
 
