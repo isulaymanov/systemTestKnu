@@ -56,10 +56,7 @@ public class SecurityConfig {
 	   @Bean
 	    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 	        http.csrf((c)-> c.disable())
-			//Добавил 11.11.2024 last chang в моем коде время 21:35 если какиета api отваляться то тут надо удалить
-			.cors(cors -> cors.configurationSource(corsConfigurationSource())) // Включение CORS
-			//--------------------------------------------------------------------------------
-        	//.cors((c) -> c.disable())  //Это нужно наоборот раскоменьтирватт время 21:35
+			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 	        .authorizeHttpRequests((authz) ->
 	        authz.requestMatchers(
 	        		"/api/login",
@@ -68,7 +65,7 @@ public class SecurityConfig {
 	        		"/api/adduser",
 	        		"/api/refreshToken",
 					"/testing/**",
-					"/api/testing-group/group/*",  // Новый общедоступный маршрут
+					"/api/testing-group/group/*",
 					"/api/testing-group/testing-group/all",
 					"/api/answer-option/question/*",
 					"/api/question/testing/*",
@@ -83,7 +80,6 @@ public class SecurityConfig {
             .logout(logout -> logout
                     .logoutUrl("/api/logout")
                     .logoutSuccessHandler((request, response, authentication) -> {
-                        // Invalidate token on logout
                         String token = (String) filter.extractTokenFromRequest(request); 
                         tokenBlacklistService.addToBlacklist(token);
                         tokenBlacklistService.toString();
@@ -111,7 +107,7 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(List.of("http://localhost:8080")); // Укажите разрешенные источники
+		configuration.setAllowedOrigins(List.of("http://localhost:8080"));
 		configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE", "OPTIONS","CONNECT","PUT","TRACE","HEAD"));
 		configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 		configuration.setAllowCredentials(true);

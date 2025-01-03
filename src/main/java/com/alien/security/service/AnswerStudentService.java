@@ -15,8 +15,6 @@ import com.alien.security.dto.*;
 public class AnswerStudentService {
     private final AnswerStudentRepository answerStudentRepository;
 
-
-
     @Autowired
     public AnswerStudentService(AnswerStudentRepository answerStudentRepository){
         this.answerStudentRepository = answerStudentRepository;
@@ -28,32 +26,19 @@ public class AnswerStudentService {
 
     @Transactional(readOnly = true)
     public List<AnswerStudentDTO> getAnswerStudents(Long attemptStudentId) {
-        // Получаем список сущностей AnswerStudent по attemptStudentId
         List<AnswerStudent> answerStudents = answerStudentRepository.findByAttemptStudentId(attemptStudentId);
 
-        // Преобразуем список сущностей в список DTO вручную
         return answerStudents.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-//    @Transactional(readOnly = true)
-//    public AnswerStudentDTO getAnswerStudentDTO(Long id) {
-//        // Находим сущность AnswerStudent по id
-//        AnswerStudent answerStudent = answerStudentRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("AnswerStudent not found with id " + id));
-//
-//        // Преобразуем сущность AnswerStudent в DTO вручную
-//        return convertToDTO(answerStudent);
-//    }
 
     private AnswerStudentDTO convertToDTO(AnswerStudent answerStudent) {
         AnswerStudentDTO answerStudentDTO = new AnswerStudentDTO();
 
-        // Заполнение данных AnswerStudentDTO
         answerStudentDTO.setId(answerStudent.getId());
 
-        // Преобразуем AttemptStudent в AttemptStudentDTO
         AttemptStudentDTO attemptStudentDTO = new AttemptStudentDTO();
         attemptStudentDTO.setId(answerStudent.getAttemptStudent().getId());
         attemptStudentDTO.setName(answerStudent.getAttemptStudent().getName());
@@ -63,7 +48,6 @@ public class AnswerStudentService {
         attemptStudentDTO.setStartTime(answerStudent.getAttemptStudent().getStartTime());
         attemptStudentDTO.setEndTime(answerStudent.getAttemptStudent().getEndTime());
 
-        // Преобразуем TestingGroupDTO
         if (answerStudent.getAttemptStudent().getTestingGroup() != null) {
             attemptStudentDTO.setTestingGroup(new TestingGroupDTO(
                     answerStudent.getAttemptStudent().getTestingGroup().getId(),
@@ -83,7 +67,6 @@ public class AnswerStudentService {
 
         answerStudentDTO.setAttemptStudent(attemptStudentDTO);
 
-        // Преобразуем QuestionDTO
         QuestionDTO questionDTO = new QuestionDTO();
         questionDTO.setId(answerStudent.getQuestion().getId());
         questionDTO.setQuestionText(answerStudent.getQuestion().getQuestionText());
@@ -96,12 +79,11 @@ public class AnswerStudentService {
         ));
         answerStudentDTO.setQuestion(questionDTO);
 
-        // Преобразуем AnswerOptionDTO
         AnswerOptionDTO answerOptionDTO = new AnswerOptionDTO();
         answerOptionDTO.setId(answerStudent.getAnswerOption().getId());
         answerOptionDTO.setAnswerText(answerStudent.getAnswerOption().getAnswerText());
         answerOptionDTO.setIsCorrect(answerStudent.getAnswerOption().getIsCorrect());
-        answerOptionDTO.setQuestion(questionDTO);  // Используем тот же QuestionDTO
+        answerOptionDTO.setQuestion(questionDTO);
         answerStudentDTO.setAnswerOption(answerOptionDTO);
 
         return answerStudentDTO;

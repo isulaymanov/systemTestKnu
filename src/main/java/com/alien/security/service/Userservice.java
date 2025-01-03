@@ -41,7 +41,6 @@ public class Userservice {
     	  if (userrepo.existsByUsername(userModel.getUsername())) {
     	        throw new BadCredentialsException("! @ Username already exists. Please choose a different username.");
     	    }
-    	//userModel.setId((int)Math.round(Math.random()*5));
     	userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
     	System.out.println(userModel);
     	return userrepo.save(userModel);

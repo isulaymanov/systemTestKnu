@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-//import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -86,11 +85,7 @@ public class RestApp {
 		System.out.println(userModel);
 		return ResponseEntity.status(HttpStatus.OK).body(userModel);
 	}
-	
-//	@GetMapping("/currentuser")
-//	public String getLoggedUer(Principal principal){
-//		return principal.getName();
-//	}
+
 
 	@GetMapping("/currentuser")
 	public UserModelDTO getLoggedUer(Principal principal){
@@ -119,7 +114,6 @@ public class RestApp {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	
 
 	@PostMapping("/createuser")
 	public ResponseEntity<Map<UserModel,String>> createUser(@RequestBody UserModel userModel){

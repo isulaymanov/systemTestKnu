@@ -24,13 +24,8 @@ public class TestingGroupService {
 
 
     public TestingGroup createTestingGroup(TestingGroup testingGroup) {
-        // Можно добавить дополнительную логику валидации или обработки данных
         return testingGroupRepository.save(testingGroup);
     }
-
-//    public List<TestingGroup> getTestingGroup(Long groupId){
-//        return testingGroupRepository.findByGroupId(groupId);
-//    }
 
     public List<TestingGroupDTO> getAllTestingGroupsByGroupId(Long groupId) {
         List<TestingGroup> testingGroups = testingGroupRepository.findByGroupId(groupId);

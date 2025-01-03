@@ -32,12 +32,6 @@ public class AnswerStudentController {
         return answerStudentService.getAnswerStudents(attemptStudentId);
     }
 
-//    @GetMapping("/answer-students/{id}")
-//    public AnswerStudentDTO getAnswerStudent(@PathVariable Long id) {
-//        return answerStudentService.getAnswerStudentDTO(id);
-//    }
-
-
     @PatchMapping("/{id}")
     public ResponseEntity<AnswerStudent> updateAnswerStudent(@PathVariable Long id, @RequestBody AnswerStudent updateAnswerStudent){
         AnswerStudent answerStudent = answerStudentService.updateAnswerStudent(id, updateAnswerStudent);

@@ -28,14 +28,12 @@ public class TestingService {
 
     @Transactional
     public Testing updateTesting(Long id, Testing updateTesting, UserModel user) {
-        // Находим тестирование по ID
 
         Optional<Testing> existingTestingOptional = testingRepository.findByIdAndUser(id, user);
 
         if (existingTestingOptional.isPresent()) {
             Testing existingTesting = existingTestingOptional.get();
 
-            // Обновляем только измененные поля
             if (updateTesting.getName() != null && !updateTesting.getName().equals(existingTesting.getName())) {
                 existingTesting.setName(updateTesting.getName());
             }
@@ -49,11 +47,9 @@ public class TestingService {
                 existingTesting.setLimitDate(updateTesting.getLimitDate());
             }
 
-            // Сохраняем изменения
             return testingRepository.save(existingTesting);
         }
 
-        // Если тестирование не найдено, возвращаем null (или можно выбросить исключение)
         throw new EntityNotFoundException("Testing with id " + id + " not found");
     }
 
